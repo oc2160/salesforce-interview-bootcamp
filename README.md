@@ -57,7 +57,7 @@
 ### Option 1 — View as Static UI (No AI, works offline)
 1. Clone this repository
    ```bash
-  https://github.com/oc2160
+  git clone https://github.com/oc2160/salesforce-interview-bootcamp.git
    ```
 2. Open `sf_bootcamp.html` in any browser
 3. The theory content, cards, and UI will fully work
