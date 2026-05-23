@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salesforce Interview Bootcamp — Omkar</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07090f;--surface:#0f1623;--surface2:#141e2e;--surface3:#1a2640;
+  --border:#1c2d44;--border2:#243652;
+  --blue:#0176d3;--blue-b:#1a9cf7;--blue-glow:rgba(1,118,211,0.18);
+  --green:#04844b;--green-b:#05b058;
+  --amber:#ff9e0c;--red:#c23934;--purple:#7c3aed;--purple-b:#a78bfa;
+  --text:#dde6f2;--text-m:#7a91ae;--text-d:#3d5470;
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
+/* ── LAYOUT ── */
+.app{display:flex;flex-direction:column;height:100vh}
+.topbar{height:52px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 18px;flex-shrink:0}
+.brand{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:var(--blue-b);letter-spacing:-0.5px}
+.brand em{color:var(--text-m);font-style:normal;font-weight:400}
+.pill{background:var(--blue);color:#fff;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:20px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.5px}
+.user-tag{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--text-m)}
+.dot-live{width:6px;height:6px;border-radius:50%;background:var(--green-b);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.body{display:flex;flex:1;overflow:hidden}
+/* ── SIDEBAR ── */
+.sidebar{width:210px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto}
+.sidebar::-webkit-scrollbar{width:3px}.sidebar::-webkit-scrollbar-thumb{background:var(--border2)}
+.sec-label{padding:14px 14px 5px;font-size:9.5px;font-weight:700;color:var(--text-d);letter-spacing:1.8px;text-transform:uppercase;font-family:'IBM Plex Mono',monospace}
+.ph{padding:8px 13px;display:flex;align-items:center;gap:9px;cursor:pointer;border-left:3px solid transparent;font-size:12px;color:var(--text-m);transition:all .18s}
+.ph:hover{background:var(--surface2);color:var(--text)}
+.ph.on{background:var(--blue-glow);border-left-color:var(--blue-b);color:var(--blue-b)}
+.ph-num{width:19px;height:19px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;color:var(--text-d);flex-shrink:0}
+.ph.on .ph-num{background:var(--blue);border-color:var(--blue);color:#fff}
+.sb-div{height:1px;background:var(--border);margin:8px 13px}
+.action-btn{margin:8px 12px 4px;padding:8px;background:linear-gradient(135deg,var(--blue),#0a5bc4);border:none;border-radius:7px;color:#fff;font-size:11.5px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;text-align:left}
+.action-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px var(--blue-glow)}
+.action-btn.purple{background:linear-gradient(135deg,var(--purple),#4c1d95)}
+.action-btn.amber{background:linear-gradient(135deg,#b45309,#92400e)}
+/* ── MAIN CONTENT ── */
+.content{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.ph-head{padding:14px 18px 0;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
+.ph-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:700}
+.ph-sub{font-size:11.5px;color:var(--text-m);margin-top:2px}
+.tabs{display:flex;gap:5px;padding:10px 0 12px;flex-wrap:wrap}
+.tab{padding:4px 12px;border-radius:18px;font-size:11px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text-m);transition:all .15s;font-family:'Inter',sans-serif}
+.tab:hover{border-color:var(--blue);color:var(--blue)}
+.tab.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.split{display:flex;flex:1;overflow:hidden}
+/* ── THEORY ── */
+.theory{flex:1;overflow-y:auto;padding:16px 18px;min-width:0}
+.theory::-webkit-scrollbar{width:4px}.theory::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.card{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:14px 16px;margin-bottom:12px}
+.cl{font-size:9.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;margin-bottom:7px}
+.cl.concept{color:var(--blue-b)}.cl.analogy{color:var(--amber)}.cl.interview{color:var(--green-b)}
+.cl.tricky{color:var(--red)}.cl.mistake{color:#fb7185}.cl.scenario{color:var(--purple-b)}.cl.code{color:#34d399}
+.card-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
+.card p{font-size:12.5px;line-height:1.65;color:var(--text-m)}
+.card p strong{color:var(--text)}
+.card code{background:rgba(1,118,211,0.12);color:var(--blue-b);padding:1px 5px;border-radius:3px;font-family:'IBM Plex Mono',monospace;font-size:11.5px}
+.card ul{padding-left:15px;margin-top:5px}
+.card li{font-size:12.5px;color:var(--text-m);margin-bottom:4px;line-height:1.5}
+.card li strong{color:var(--text)}
+.qbox{background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.25);border-radius:7px;padding:10px 13px;margin-top:8px;font-size:12px;color:var(--purple-b);font-style:italic;line-height:1.6}
+.code-block{background:#0d1117;border:1px solid var(--border2);border-radius:7px;padding:12px;margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#e2e8f0;line-height:1.7;white-space:pre-wrap;overflow-x:auto}
+.code-block .kw{color:#ff79c6}.code-block .str{color:#f1fa8c}.code-block .cm{color:#6272a4}.code-block .cls{color:#8be9fd}
+/* ── CHAT PANEL ── */
+.chat-panel{width:335px;flex-shrink:0;display:flex;flex-direction:column;background:var(--surface);border-left:1px solid var(--border)}
+.chat-head{padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.chat-head-title{font-family:'Syne',sans-serif;font-size:12.5px;font-weight:700}
+.ai-badge{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--text-m)}
+.chat-msgs{flex:1;overflow-y:auto;padding:10px 12px}
+.chat-msgs::-webkit-scrollbar{width:3px}.chat-msgs::-webkit-scrollbar-thumb{background:var(--border2)}
+.msg{margin-bottom:10px;animation:fadeUp .25s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.msg-who{font-size:9.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;margin-bottom:3px}
+.msg.iv .msg-who{color:var(--blue-b)}.msg.me .msg-who{color:var(--amber)}.msg.sys .msg-who{color:var(--text-d)}
+.msg-bub{padding:9px 11px;border-radius:7px;font-size:12px;line-height:1.6}
+.msg.iv .msg-bub{background:var(--surface2);border:1px solid var(--border);color:var(--text)}
+.msg.me .msg-bub{background:rgba(255,158,12,.09);border:1px solid rgba(255,158,12,.2);color:var(--text)}
+.msg.sys .msg-bub{background:rgba(4,132,75,.08);border:1px solid rgba(4,132,75,.2);color:var(--green-b);font-size:11px}
+.score-tag{display:inline-flex;align-items:center;gap:4px;background:rgba(1,118,211,.15);border:1px solid rgba(1,118,211,.3);border-radius:5px;padding:2px 8px;font-size:10.5px;color:var(--blue-b);font-family:'IBM Plex Mono',monospace;margin-top:5px}
+.typing-ind{display:flex;align-items:center;gap:3px;padding:9px 11px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;width:fit-content}
+.typing-ind span{width:5px;height:5px;border-radius:50%;background:var(--blue-b);animation:bob 1.1s infinite}
+.typing-ind span:nth-child(2){animation-delay:.18s}.typing-ind span:nth-child(3){animation-delay:.36s}
+@keyframes bob{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+.chat-foot{padding:10px 12px;border-top:1px solid var(--border);flex-shrink:0}
+.quick-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:7px}
+.qbtn{padding:3px 9px;border-radius:12px;border:1px solid var(--border);background:transparent;color:var(--text-d);font-size:10.5px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.qbtn:hover{border-color:var(--blue);color:var(--blue)}
+.inp-row{display:flex;gap:7px}
+.chat-inp{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:8px 11px;color:var(--text);font-size:12px;font-family:'Inter',sans-serif;outline:none;resize:none;height:58px;transition:border-color .2s}
+.chat-inp:focus{border-color:var(--blue)}
+.chat-inp::placeholder{color:var(--text-d)}
+.send{background:var(--blue);border:none;border-radius:7px;width:36px;height:58px;cursor:pointer;color:#fff;font-size:15px;transition:background .2s;flex-shrink:0}
+.send:hover{background:var(--blue-b)}
+.send:disabled{opacity:.35;cursor:not-allowed}
+/* LOADER */
+#loader{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:999}
+.loader-logo{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--blue-b)}
+.loader-bar{width:180px;height:2px;background:var(--border);border-radius:1px;overflow:hidden}
+.loader-fill{height:100%;background:var(--blue-b);border-radius:1px;animation:lf 1.8s ease forwards}
+@keyframes lf{from{width:0}to{width:100%}}
+.loader-txt{font-size:11px;color:var(--text-m);font-family:'IBM Plex Mono',monospace}
+</style>
+</head>
+<body>
+<div id="loader">
+  <div class="loader-logo">SF Interview Bootcamp</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+  <div class="loader-txt" id="ltxt">Initializing AI trainer...</div>
+</div>
+
+<div class="app" id="app" style="display:none">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="brand">SF<em>Bootcamp</em></div>
+      <div class="pill">AI-POWERED</div>
+    </div>
+    <div class="user-tag"><div class="dot-live"></div>Omkar · PD1 Certified · Fresher → Ready</div>
+  </div>
+
+  <div class="body">
+    <div class="sidebar">
+      <div class="sec-label">8 Phases</div>
+      <div class="ph on" onclick="gotoPhase(0)" id="p0"><div class="ph-num">1</div>SF Fundamentals</div>
+      <div class="ph" onclick="gotoPhase(1)" id="p1"><div class="ph-num">2</div>Apex Development</div>
+      <div class="ph" onclick="gotoPhase(2)" id="p2"><div class="ph-num">3</div>LWC</div>
+      <div class="ph" onclick="gotoPhase(3)" id="p3"><div class="ph-num">4</div>Scenario Mastery</div>
+      <div class="ph" onclick="gotoPhase(4)" id="p4"><div class="ph-num">5</div>Interview Simulation</div>
+      <div class="ph" onclick="gotoPhase(5)" id="p5"><div class="ph-num">6</div>Advanced Topics</div>
+      <div class="ph" onclick="gotoPhase(6)" id="p6"><div class="ph-num">7</div>Mock Interviews</div>
+      <div class="ph" onclick="gotoPhase(7)" id="p7"><div class="ph-num">8</div>Job Readiness</div>
+      <div class="sb-div"></div>
+      <div class="sec-label">Quick Start</div>
+      <button class="action-btn" onclick="doMock()">▶ Full Mock Interview</button>
+      <button class="action-btn purple" onclick="doRapid()">⚡ Rapid Fire Round</button>
+      <button class="action-btn amber" onclick="doCoding()">💻 Coding Challenge</button>
+    </div>
+
+    <div class="content">
+      <div class="ph-head">
+        <div class="ph-title" id="phTitle">Phase 1 — Salesforce Fundamentals</div>
+        <div class="ph-sub" id="phSub">Architecture · Objects · Security · Flows · Deployment</div>
+        <div class="tabs" id="tabRow"></div>
+      </div>
+      <div class="split">
+        <div class="theory" id="theory"></div>
+        <div class="chat-panel">
+          <div class="chat-head">
+            <div class="chat-head-title">AI Interviewer</div>
+            <div class="ai-badge"><div class="dot-live"></div>15yr exp · MNC Hiring Manager</div>
+          </div>
+          <div class="chat-msgs" id="msgs"></div>
+          <div class="chat-foot">
+            <div class="quick-row" id="qrow"></div>
+            <div class="inp-row">
+              <textarea class="chat-inp" id="inp" placeholder="Type your answer or ask anything..." onkeydown="handleKey(event)"></textarea>
+              <button class="send" id="sbtn" onclick="send()">↑</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ME = `Omkar — Fresher Salesforce Developer, Pune India. MCA Data Science MIT ADT University 2023-2025. BSc Biotechnology background. Salesforce Platform Developer I (PD1) certified (April 2026). Oracle Data Science certified. IBM internship: Watson Assistant, IBM Cloud, AI/ML projects. Skills: Apex, LWC, SOQL/SOSL, REST/SOAP APIs, JavaScript/HTML/CSS, Python, SQL, Power BI, Tableau. Superbadges: Apex Web Service, Record Triggered Flow, Flow Fundamentals, Agentforce Service, Flow Optimization. Actively job hunting: Pune/Mumbai/Bangalore/Remote, Indian MNCs and startups.`;
+
+const DATA = [
+  {
+    title:"Phase 1 — Salesforce Fundamentals",
+    sub:"Architecture · Objects · Security · Flows · Deployment",
+    topics:["Architecture","Objects & Fields","Relationships","Security Model","Flows","Validation Rules","Reports","Deployment"],
+    cards:{
+      "Architecture":[
+        {t:"concept",h:"Salesforce Architecture",b:"Salesforce runs on <strong>Multitenant Cloud Architecture</strong> hosted on Hyperforce. All customers share the same application code and infrastructure — data is isolated by unique <code>Org ID</code>. Three tiers: <strong>Presentation</strong> (Lightning/VF UI), <strong>Logic</strong> (Apex, Flows), <strong>Data</strong> (sObjects, SOQL). Metadata-driven development means customizations live as metadata, not schema changes."},
+        {t:"analogy",h:"Real-World Analogy",b:"Think of Salesforce like a <strong>co-working office building</strong>. Every company (tenant) works in the same building (shared platform), but each has a private locked floor (org). The building provides electricity, internet, security (governor limits) — you just bring your furniture (customizations)."},
+        {t:"interview",h:"Interview Answer",b:`"Salesforce uses a multitenant cloud architecture where multiple orgs share the same code base and infrastructure but with complete data isolation. It follows an MVC pattern — Lightning for View, Apex/Flows for Controller logic, and sObjects for the Model. Governor limits exist to enforce fair resource usage across all tenants in this shared environment. The platform is metadata-driven — most customizations are stored as XML metadata, not database changes."`},
+        {t:"tricky",h:"Tricky Follow-Ups",b:"<ul><li><strong>Q: Why do governor limits exist?</strong> — They protect the shared infrastructure from one org monopolizing resources.</li><li><strong>Q: What is the difference between metadata and data?</strong> — Metadata is configuration (fields, objects, code); data is records.</li><li><strong>Q: What is Hyperforce?</strong> — Salesforce's rebuilt infrastructure on public cloud (AWS, Azure, GCP) for data residency and scalability.</li></ul>"},
+        {t:"scenario",h:"Scenario Question",b:`<div class='qbox'>INTERVIEWER: "A client says their Apex loop runs 500 SOQL queries and is hitting limits in production. What is wrong and what is your fix strategy?"</div>`}
+      ],
+      "Objects & Fields":[
+        {t:"concept",h:"Objects & Fields",b:"<strong>Standard Objects:</strong> Account, Contact, Lead, Opportunity, Case — pre-built by Salesforce. <strong>Custom Objects:</strong> Created per business need, suffixed with <code>__c</code> (e.g., <code>Invoice__c</code>). Key field types: Text, Number, Date, Currency, Picklist, Lookup (flexible FK), Master-Detail (strict parent-child), Formula (calculated), Roll-Up Summary (aggregate from children)."},
+        {t:"tricky",h:"Top Interview Questions",b:"<ul><li><strong>Q: Lookup vs Master-Detail?</strong> Lookup is optional, child can exist independently. Master-Detail is mandatory, child is deleted with parent, child inherits parent's sharing.</li><li><strong>Q: Can you convert MD to Lookup?</strong> Yes, if there are no roll-up summary fields. Lookup to MD requires all existing records have a parent.</li><li><strong>Q: What is an External Object?</strong> Represents data from external systems via Salesforce Connect/OData — real-time access without storing data in Salesforce.</li></ul>"},
+        {t:"mistake",h:"Beginner Mistakes",b:"<ul><li>Creating custom fields when standard fields exist</li><li>Not knowing the 800 custom fields per object limit</li><li>Confusing Roll-Up Summary (only works on Master-Detail) with Formula fields</li></ul>"}
+      ],
+      "Security Model":[
+        {t:"concept",h:"4-Layer Security Model",b:"<strong>Layer 1 — Org:</strong> Login hours, IP restrictions, password policies. <strong>Layer 2 — Object:</strong> Profiles & Permission Sets (CRUD per object). <strong>Layer 3 — Field:</strong> Field-Level Security (visible/editable per profile). <strong>Layer 4 — Record:</strong> OWD → Role Hierarchy → Sharing Rules → Manual Sharing. <strong>Golden Rule: OWD sets the most restrictive baseline; sharing only opens up, never restricts.</strong>"},
+        {t:"interview",h:"Interview Answer",b:`"Salesforce uses a layered security model. At the org level, we control who can log in. At object level, Profiles control what objects a user can access and what DML operations they can perform — Permission Sets add to Profile permissions but never restrict them. Field-level security controls field visibility. Record-level security starts with OWD — Private means only owner can see. Role Hierarchy automatically shares upward. Sharing Rules share with groups or roles. Manual Sharing is one-off."`},
+        {t:"tricky",h:"Classic Traps",b:"<ul><li><strong>Q: Can Permission Sets restrict Profile permissions?</strong> No — they only ADD permissions.</li><li><strong>Q: If OWD is Private, can a manager in the role hierarchy see subordinate records?</strong> Yes — by default, role hierarchy grants read/write to higher roles.</li><li><strong>Q: What is the difference between a Role and a Profile?</strong> Profile controls what you can DO (object/field access). Role controls what you can SEE (record visibility via hierarchy).</li></ul>"}
+      ],
+      "Flows":[
+        {t:"concept",h:"Salesforce Flows",b:"Flow is Salesforce's declarative automation tool. Types: <strong>Screen Flow</strong> (user-guided UI), <strong>Record-Triggered Flow</strong> (fires on DML — replaces Workflow/Process Builder), <strong>Schedule-Triggered</strong> (runs at intervals), <strong>Platform Event Triggered</strong>, <strong>Autolaunched</strong> (invocable from Apex/Process). Key elements: Get/Update/Create/Delete Records, Decision, Loop, Assignment, Screen, Subflow."},
+        {t:"tricky",h:"Flow vs Trigger Decision",b:"<strong>Use Flow when:</strong> Simple field updates, sending emails, creating child records, no complex conditions, admin can maintain it.<br><br><strong>Use Apex Trigger when:</strong> Complex multi-object logic, callouts needed, performance-critical bulk operations (1000s of records), logic that's too complex for Flow.<br><br><strong>Salesforce best practice:</strong> Declarative-first. Use Apex only when Flow cannot handle it."}
+      ]
+    }
+  },
+  {
+    title:"Phase 2 — Apex Development",
+    sub:"Triggers · SOQL · Governor Limits · Async Apex · Test Classes",
+    topics:["Apex Basics","Triggers","Governor Limits","Bulkification","SOQL/SOSL","Async Apex","Test Classes","Exception Handling"],
+    cards:{
+      "Apex Basics":[
+        {t:"concept",h:"What is Apex?",b:"Apex is Salesforce's <strong>strongly-typed, object-oriented, server-side language</strong> compiled and executed on Force.com. Syntax is Java-like. Runs in transactions subject to governor limits. Key classes: <code>Database</code>, <code>System</code>, <code>Schema</code>, <code>SObject</code>. DML operations: <code>insert</code>, <code>update</code>, <code>delete</code>, <code>upsert</code>, <code>merge</code>, <code>undelete</code>."},
+        {t:"interview",h:"Interview Answer",b:`"Apex is Salesforce's proprietary programming language for server-side logic that can't be handled declaratively. I use it for complex triggers, batch processing, REST API integrations, and custom business logic. Every Apex execution is a transaction with governor limits — I always design with bulkification in mind, using collections instead of individual operations, and moving SOQL/DML outside loops."`},
+        {t:"code",h:"Basic Apex Example",b:`<div class="code-block"><span class="cm">// Query all Accounts with Revenue > 1M</span>
+<span class="cls">List</span>&lt;<span class="cls">Account</span>&gt; bigAccounts = [
+    <span class="kw">SELECT</span> Id, Name, AnnualRevenue
+    <span class="kw">FROM</span> Account
+    <span class="kw">WHERE</span> AnnualRevenue &gt; <span class="str">1000000</span>
+    <span class="kw">LIMIT</span> <span class="str">200</span>
+];
+
+<span class="kw">for</span>(<span class="cls">Account</span> acc : bigAccounts){
+    acc.Rating = <span class="str">'Hot'</span>;
+}
+<span class="kw">update</span> bigAccounts; <span class="cm">// Single DML — bulkified!</span></div>`}
+      ],
+      "Triggers":[
+        {t:"concept",h:"Trigger Best Practices",b:"<strong>One trigger per object</strong> — always. Pattern: Trigger calls Handler class. Context variables: <code>Trigger.new</code>, <code>Trigger.old</code>, <code>Trigger.newMap</code>, <code>Trigger.oldMap</code>, <code>Trigger.isInsert</code>, <code>Trigger.isBefore</code>.<br><br><strong>Never:</strong> SOQL/DML inside loops, logic in trigger body, multiple triggers per object."},
+        {t:"code",h:"Correct Trigger Pattern",b:`<div class="code-block"><span class="cm">// AccountTrigger.trigger</span>
+<span class="kw">trigger</span> AccountTrigger <span class="kw">on</span> <span class="cls">Account</span>(
+    before insert, before update, after insert, after update
+){
+    AccountTriggerHandler.<span class="kw">run</span>();
+}
+
+<span class="cm">// AccountTriggerHandler.cls</span>
+<span class="kw">public class</span> <span class="cls">AccountTriggerHandler</span> {
+    <span class="kw">public static void</span> run(){
+        <span class="kw">if</span>(Trigger.isBefore &amp;&amp; Trigger.isInsert){
+            handleBeforeInsert(Trigger.new);
+        }
+    }
+    <span class="kw">private static void</span> handleBeforeInsert(
+        <span class="cls">List</span>&lt;<span class="cls">Account</span>&gt; newList
+    ){
+        <span class="kw">for</span>(<span class="cls">Account</span> a : newList){
+            <span class="kw">if</span>(a.Phone == <span class="kw">null</span>)
+                a.Phone = <span class="str">'0000000000'</span>;
+        }
+    }
+}</div>`},
+        {t:"scenario",h:"Recursion Scenario",b:`<div class="qbox">INTERVIEWER: "Production users get 'Maximum trigger depth exceeded' when updating Accounts. The previous dev wrote 3 triggers on Account. You are called to fix it. Walk me through your full approach."</div>`}
+      ],
+      "Governor Limits":[
+        {t:"concept",h:"Critical Governor Limits",b:"<ul><li><code>SOQL queries:</code> 100 (sync) / 200 (async)</li><li><code>DML statements:</code> 150</li><li><code>Records per DML:</code> 10,000</li><li><code>CPU time:</code> 10,000ms (sync) / 60,000ms (async)</li><li><code>Heap size:</code> 6MB (sync) / 12MB (async)</li><li><code>Callouts:</code> 100 per transaction</li><li><code>Future methods:</code> 50 per transaction</li></ul>"},
+        {t:"interview",h:"How to Handle Limits",b:`"I always design Apex to be limit-aware from the start. I collect all records before entering loops, perform SOQL queries before loops using Maps for O(1) lookup, batch all DML after loops, and use Async Apex (Batch/Queueable) for heavy processing that would exceed synchronous limits. I also use Limits class methods like Limits.getQueries() during development to monitor usage."`}
+      ],
+      "Async Apex":[
+        {t:"concept",h:"4 Async Methods",b:"<strong>@future:</strong> Simple async for callouts and cross-object updates. Only accepts primitives. No chaining.<br><strong>Queueable:</strong> Supports sObjects, chaining (Queueable in Queueable), job ID for monitoring.<br><strong>Batch Apex:</strong> Process millions of records in chunks (default 200). Implements <code>Database.Batchable</code> — start(), execute(), finish().<br><strong>Scheduled Apex:</strong> Cron expression based scheduling. Implements <code>Schedulable</code>."},
+        {t:"tricky",h:"Interview Questions",b:"<ul><li><strong>Q: When to use Batch vs Queueable?</strong> Batch for massive data volumes (millions). Queueable for complex sequential async processing with chaining.</li><li><strong>Q: Can you chain Queueable jobs?</strong> Yes — from execute() method, enqueue another Queueable. Limit: 1 level in test, unlimited in production.</li><li><strong>Q: What is the start() method in Batch Apex?</strong> Returns a QueryLocator or Iterable that defines what records to process.</li></ul>"}
+      ],
+      "Test Classes":[
+        {t:"concept",h:"Test Class Rules",b:"<strong>Minimum:</strong> 75% code coverage org-wide to deploy. <strong>Best practice:</strong> 90%+. Use <code>@isTest</code> annotation. Always use <code>Test.startTest()</code> and <code>Test.stopTest()</code> to reset governor limits and execute async jobs. Use <code>System.assert()</code>, <code>System.assertEquals()</code>. Never use <code>seeAllData=true</code> — create your own test data."},
+        {t:"code",h:"Test Class Pattern",b:`<div class="code-block"><span class="kw">@isTest</span>
+<span class="kw">private class</span> <span class="cls">AccountTriggerTest</span> {
+    <span class="kw">@TestSetup</span>
+    <span class="kw">static void</span> setup(){
+        <span class="cls">List</span>&lt;<span class="cls">Account</span>&gt; accs = <span class="kw">new</span> <span class="cls">List</span>&lt;<span class="cls">Account</span>&gt;();
+        <span class="kw">for</span>(<span class="cls">Integer</span> i = 0; i &lt; 200; i++){
+            accs.add(<span class="kw">new</span> <span class="cls">Account</span>(Name=<span class="str">'Test '</span>+i));
+        }
+        insert accs; <span class="cm">// Test with 200 records (bulk!)</span>
+    }
+    <span class="kw">@isTest</span>
+    <span class="kw">static void</span> testPhoneDefaulted(){
+        Test.startTest();
+        <span class="cls">List</span>&lt;<span class="cls">Account</span>&gt; result = [
+            <span class="kw">SELECT</span> Phone <span class="kw">FROM</span> Account
+        ];
+        Test.stopTest();
+        <span class="kw">for</span>(<span class="cls">Account</span> a : result){
+            System.assertEquals(<span class="str">'0000000000'</span>, a.Phone,
+                <span class="str">'Phone should be defaulted'</span>);
+        }
+    }
+}</div>`}
+      ]
+    }
+  },
+  {
+    title:"Phase 3 — Lightning Web Components",
+    sub:"Architecture · Decorators · Wire · Events · LDS · Navigation",
+    topics:["LWC Architecture","@api @wire @track","Events","Apex Integration","Lifecycle Hooks","Navigation","Error Handling"],
+    cards:{
+      "LWC Architecture":[
+        {t:"concept",h:"LWC Component Bundle",b:"Each LWC is a folder with: <code>component.html</code> (template), <code>component.js</code> (controller class), <code>component.js-meta.xml</code> (config/deployment targets), optionally <code>component.css</code> and <code>component.svg</code>. Built on native Web Standards: Custom Elements, Shadow DOM, ES Modules. No proprietary framework overhead — compiles to optimized native JavaScript."},
+        {t:"interview",h:"LWC vs Aura",b:`"LWC was introduced in Spring '19 as the modern alternative to Aura components. LWC is built on web standards — Shadow DOM, Custom Elements, ES6+ — making it faster and closer to native browser APIs. Aura relied on a proprietary framework with heavier overhead. In LWC, reactive properties use standard JavaScript class syntax. For new development, Salesforce recommends LWC. Aura is only used when we need Aura-specific features or maintaining legacy components."`},
+        {t:"tricky",h:"Interview Traps",b:"<ul><li><strong>Q: What is Shadow DOM?</strong> Encapsulates component's DOM — styles and DOM from outside cannot penetrate, preventing style leakage.</li><li><strong>Q: What was @track in old LWC?</strong> Old LWC needed @track for deep reactive tracking of objects/arrays. Now all properties are reactive by default — @track is only needed for nested object/array mutation detection.</li><li><strong>Q: How to pass data from child to parent?</strong> Using Custom Events — child dispatches <code>CustomEvent</code>, parent listens with <code>on{eventname}</code>.</li></ul>"},
+        {t:"code",h:"LWC Event Example",b:`<div class="code-block"><span class="cm">// Child component dispatches event</span>
+<span class="kw">import</span> { LightningElement } <span class="kw">from</span> <span class="str">'lwc'</span>;
+<span class="kw">export default class</span> <span class="cls">ChildComp</span> <span class="kw">extends</span> <span class="cls">LightningElement</span> {
+    handleClick(){
+        <span class="kw">const</span> evt = <span class="kw">new</span> CustomEvent(<span class="str">'myevent'</span>, {
+            detail: { message: <span class="str">'Hello Parent!'</span> }
+        });
+        <span class="kw">this</span>.dispatchEvent(evt);
+    }
+}
+<span class="cm">// Parent listens: &lt;c-child onmyevent={handleChild}&gt;</span></div>`}
+      ],
+      "Apex Integration":[
+        {t:"concept",h:"@wire vs Imperative Apex",b:"<strong>@wire:</strong> Reactive, automatic, cached. Used for read operations. Runs when component loads or when reactive properties change. <strong>Imperative:</strong> Manual call, used in event handlers, allows error handling, required for create/update/delete operations.<br><br><strong>Rule of thumb:</strong> Use @wire for data fetching on load. Use imperative for user-action triggered operations."},
+        {t:"code",h:"@wire and Imperative Pattern",b:`<div class="code-block"><span class="kw">import</span> { LightningElement, wire } <span class="kw">from</span> <span class="str">'lwc'</span>;
+<span class="kw">import</span> getAccounts <span class="kw">from</span> <span class="str">'@salesforce/apex/AccountCtrl.getAccounts'</span>;
+<span class="kw">import</span> saveAccount <span class="kw">from</span> <span class="str">'@salesforce/apex/AccountCtrl.saveAccount'</span>;
+
+<span class="kw">export default class</span> <span class="cls">AccountList</span> <span class="kw">extends</span> <span class="cls">LightningElement</span> {
+    <span class="cm">// @wire — reactive, auto-fetches</span>
+    @wire(getAccounts) accounts;
+
+    <span class="cm">// Imperative — on button click</span>
+    <span class="kw">async</span> handleSave(){
+        <span class="kw">try</span> {
+            <span class="kw">await</span> saveAccount({ name: <span class="str">'New Acc'</span> });
+        } <span class="kw">catch</span>(error){
+            console.error(error);
+        }
+    }
+}</div>`}
+      ]
+    }
+  },
+  {
+    title:"Phase 4 — Scenario-Based Mastery",
+    sub:"Real production problems · Debug mindset · Senior-level thinking",
+    topics:["Trigger Recursion","Governor Limit Hit","Bulk Data Issue","Security Issue","Integration Failure","Flow vs Trigger","Deployment Issue"],
+    cards:{
+      "Trigger Recursion":[
+        {t:"scenario",h:"Classic Production Scenario",b:`<div class="qbox">INTERVIEWER: "In production, users are getting 'Maximum trigger depth exceeded' when updating Accounts. The previous developer wrote logic directly in the trigger body and created 3 separate triggers on Account. You are the developer called to investigate and fix. Walk me through your complete approach — from investigation to deployment."</div>`},
+        {t:"concept",h:"Senior Developer Approach",b:"<strong>1. Investigate:</strong> Enable debug logs for affected user. Reproduce in sandbox. Check trigger chain — is Trigger A updating a field that fires Trigger B which updates Account again?<br><br><strong>2. Root cause:</strong> Multiple triggers on same object + logic causing circular update (Account → triggers Account update → Account → ...).<br><br><strong>3. Fix:</strong> Merge into single trigger with Handler pattern. Add <code>static Boolean hasRun = false</code> recursion guard in handler. Set to true at start, check before logic.<br><br><strong>4. Test:</strong> Write test class with bulk 200 records. Test all scenarios.<br><br><strong>5. Deploy:</strong> Sandbox → UAT → Production via Change Set or SFDX."}
+      ],
+      "Flow vs Trigger":[
+        {t:"concept",h:"Decision Framework — Critical Interview Topic",b:"<strong>ALWAYS use Declarative (Flow) first:</strong><br>✅ Simple field updates on same record<br>✅ Creating/updating related records with simple conditions<br>✅ Sending emails, notifications<br>✅ Approval routing<br><br><strong>Use Apex Trigger ONLY when:</strong><br>✅ Complex multi-condition logic across many objects<br>✅ HTTP callouts needed<br>✅ Performance-critical bulk processing (10k+ records)<br>✅ Logic too complex for Flow to maintain cleanly<br>✅ Shared utilities across triggers"},
+        {t:"scenario",h:"Trap Question",b:`<div class="qbox">INTERVIEWER: "We have both a Record-Triggered Flow AND an Apex Trigger running on Account update. A user bulk-loads 300 Accounts via Data Loader. Describe the execution order, potential issues, and your recommendation."</div>`}
+      ]
+    }
+  },
+  {
+    title:"Phase 5 — Interview Simulation",
+    sub:"HR · Technical · Managerial · Client rounds",
+    topics:["Tell Me About Yourself","Why Salesforce?","Project Discussion","Fresher Challenge","Salary Discussion","Stress Questions"],
+    cards:{
+      "Tell Me About Yourself":[
+        {t:"concept",h:"The PEST Formula",b:"<strong>P</strong>rofessional (30s) → <strong>E</strong>ducation highlight (15s) → <strong>S</strong>kills/certifications (20s) → <strong>T</strong>ransition to this role (15s). Total: ~80 seconds. Never exceed 2 minutes. Memorize the structure, not word-for-word."},
+        {t:"interview",h:"Omkar's Ideal Answer",b:`"I'm a fresher Salesforce Developer from Pune. I completed my MCA in Data Science from MIT ADT University, which gave me a strong programming and analytical foundation. During my MCA, I pursued Salesforce seriously — I cleared the Platform Developer I certification, completed multiple Trailhead superbadges including Apex Web Service and Agentforce Service, and interned at IBM where I built Watson Assistant chatbots. Technically, I work with Apex, LWC, SOQL, REST APIs, and I bring a data background with Python and Power BI. I'm excited about this opportunity because I want to grow as a Salesforce Developer where I can combine my certification knowledge with real-world delivery — and I believe my PD1, IBM experience, and hands-on superbadge work makes me ready to contribute meaningfully from day one."`},
+        {t:"tricky",h:"Why This Works",b:"<ul><li>Structured and time-boxed — not rambling</li><li>PD1 mentioned early — biggest fresher differentiator</li><li>IBM internship provides professional credibility</li><li>Ends with motivation — shows genuine interest, not desperation</li><li>No hollow adjectives ('hardworking', 'passionate')</li></ul>"}
+      ],
+      "Fresher Challenge":[
+        {t:"scenario",h:"Hardest Fresher Question",b:`<div class="qbox">INTERVIEWER: "You have zero real production experience. Why should we trust you with our client's live Salesforce org? What if you push broken code to production and it affects 10,000 users?"</div>`},
+        {t:"interview",h:"Ideal Answer (Use this structure)",b:`"That's a completely valid concern and I want to address it directly. First — I have PD1 certification, which means I've proven understanding of governor limits, trigger best practices, test coverage, and deployment processes — the exact safeguards that prevent production issues. Second — in my IBM internship I worked with structured development processes: code reviews, version control, and staging environments before releases. I understand you don't just push code to production. Third — I know Salesforce's deployment safety net: sandboxes, test classes with 75%+ coverage, change sets, and UAT sign-off. And honestly — my biggest asset as a fresher is that I don't have bad habits. I won't bypass test classes or skip sandbox validation. You're getting someone disciplined and certified — that's lower risk than an experienced developer who cuts corners."`}
+      ]
+    }
+  },
+  {
+    title:"Phase 6 — Advanced Topics",
+    sub:"DevOps · Agentforce · AI in Salesforce · Architecture",
+    topics:["Agentforce","Prompt Builder","DevOps & SFDX","Sandbox Strategy","Managed Packages","AI Trends"],
+    cards:{
+      "Agentforce":[
+        {t:"concept",h:"Agentforce Architecture",b:"Key components: <strong>Atlas Reasoning Engine</strong> — the AI brain that dynamically plans multi-step actions. <strong>Topics</strong> — define the agent's domain/expertise areas with instructions. <strong>Actions</strong> — what the agent can execute: Apex callouts, Flows, Prompt Templates, MuleSoft API calls. <strong>Einstein Trust Layer</strong> — masks PII before sending to LLM, zero-data-retention policy. Built in <strong>Agentforce Builder</strong> (low-code UI)."},
+        {t:"interview",h:"Interview Answer",b:`"Agentforce is Salesforce's platform for building autonomous AI agents. Unlike rule-based bots, Agentforce agents use the Atlas Reasoning Engine to dynamically decide which actions to take based on user intent. As a developer, I configure Topics — areas of expertise with grounding instructions — and Actions which are the actual operations. I've completed the Agentforce Service superbadge, so I understand how to build agents that handle customer service scenarios and hand off to human agents when needed. The Einstein Trust Layer is critical for enterprise security — it ensures no customer data is retained by external AI providers."`},
+        {t:"tricky",h:"Interview Questions",b:"<ul><li><strong>Q: What is grounding in Agentforce?</strong> Providing the agent context-specific knowledge via Data Cloud or Knowledge Base to improve answer accuracy.</li><li><strong>Q: How do you debug an Agentforce agent giving wrong answers?</strong> Review Topic instructions for ambiguity, check Action output, use Testing Center in Agentforce Builder, review Einstein activity logs.</li><li><strong>Q: What is the difference between Einstein Copilot and Agentforce Agent?</strong> Copilot is the assistant in the sidebar for Salesforce users. Agentforce Agents are autonomous, externally-facing, can operate without human prompting.</li></ul>"}
+      ],
+      "DevOps & SFDX":[
+        {t:"concept",h:"Modern Salesforce DevOps",b:"<strong>SFDX CLI:</strong> Command-line Salesforce development. <strong>Scratch Orgs:</strong> Disposable, source-trackable dev environments. <strong>Git:</strong> Feature branch workflow — never develop directly on integration branch. <strong>CI/CD:</strong> Salesforce DevOps Center, Copado, Gearset, or GitHub Actions + SFDX CLI. <strong>Deployment:</strong> Change Sets (legacy, GUI), SFDX deploy (modern), Unlocked Packages (best practice for modular orgs)."},
+        {t:"interview",h:"For Freshers: What to Know",b:`"I use VS Code with the Salesforce Extension Pack for local development. I deploy to scratch orgs for isolated feature development, then push to sandbox for integration testing. I understand the Change Set process for sandbox-to-production deployments and have learned SFDX CLI commands for source-format deployments. I've also worked with Git for version control — feature branches, pull requests, and never committing directly to main. At IBM, I followed structured SDLC processes, so professional development workflows are familiar to me."`}
+      ]
+    }
+  },
+  {
+    title:"Phase 7 — Mock Interviews",
+    sub:"Daily practice · Rapid fire · Coding rounds · HR rounds",
+    topics:["Start Technical Mock","Coding Round","Rapid Fire","HR Round","Managerial Round","Full Interview"],
+    cards:{
+      "Start Technical Mock":[
+        {t:"scenario",h:"Start Your Mock Interview",b:`<div class="qbox">Use the sidebar buttons to begin different interview modes:<br><br>▶ <strong>Full Mock Interview</strong> — Complete technical + HR round simulation<br>⚡ <strong>Rapid Fire</strong> — 10 quick questions, 30 seconds each<br>💻 <strong>Coding Challenge</strong> — Write and discuss Apex code<br><br>Or type directly in the AI Interviewer chat on the right. The AI will evaluate every answer with a score and detailed feedback.</div>`}
+      ]
+    }
+  },
+  {
+    title:"Phase 8 — Job Readiness",
+    sub:"Resume · LinkedIn · Portfolio · Application Strategy",
+    topics:["Resume Tips","LinkedIn","GitHub Portfolio","Trailhead Strategy","Application Strategy","Networking"],
+    cards:{
+      "Resume Tips":[
+        {t:"concept",h:"Omkar's Resume Power Points",b:"<strong>Already strong:</strong> PD1 cert, IBM internship, multiple superbadges, MCA MIT ADT.<br><br><strong>Maximize these:</strong><br>✅ Title: <em>'Salesforce Developer | PD1 Certified | Fresher'</em><br>✅ Superbadges: List by name — they show hands-on work<br>✅ IBM: Quantify — '<em>Built Watson Assistant chatbot reducing support tickets by X%</em>'<br>✅ Add keywords: Agentforce, SFDX, Einstein Trust Layer, Trigger Framework, LWC, Bulk Apex"},
+        {t:"interview",h:"Company-Specific Strategy",b:"<strong>Accenture/Deloitte:</strong> Lead with PD1 cert + IBM internship. They value certified freshers.<br><strong>TCS/Infosys/Wipro:</strong> Apply to 'Digital Transformation / Salesforce Practice'. Emphasize enterprise readiness.<br><strong>Capgemini/Cognizant:</strong> Highlight REST/SOAP API integration knowledge — they focus on integration projects.<br><strong>Salesforce Partners (Slalom, Wipro Salesforce COE, etc.):</strong> Show Trailhead rank + superbadge count prominently.<br><strong>Startups:</strong> Show full-stack versatility — LWC + Apex + Admin + data skills (your MCA helps here)."},
+        {t:"scenario",h:"30-Day Application Plan",b:`<div class="qbox"><strong>Week 1:</strong> Polish resume with keywords. Update LinkedIn with PD1 badge. Apply to 10 MNC portals directly.<br><strong>Week 2:</strong> Apply 15 roles on Naukri/LinkedIn. Do daily mock interviews here.<br><strong>Week 3:</strong> Network — reach out to 5 Salesforce developers on LinkedIn asking for referrals.<br><strong>Week 4:</strong> Follow up on all applications. Add a new mini-project to GitHub. Apply to 10 Salesforce partner companies.</div>`}
+      ]
+    }
+  }
+];
+
+let curPhase=0, curTopic=0, hist=[], busy=false;
+
+function init(){
+  const msgs=['Initializing AI trainer...','Loading 8-phase curriculum...','Connecting interviewer AI...'];
+  let i=0;
+  const iv=setInterval(()=>{
+    if(++i<msgs.length) document.getElementById('ltxt').textContent=msgs[i];
+    else {clearInterval(iv);}
+  },500);
+  setTimeout(()=>{
+    document.getElementById('loader').style.display='none';
+    document.getElementById('app').style.display='flex';
+    renderPhase(0);
+    addMsg('iv',"Welcome Omkar! 👋 I've reviewed your profile — PD1 certified, IBM Watson internship, MCA from MIT ADT, strong superbadge count. Solid foundation for a fresher. Let's make you <em>interview-ready for MNCs and startups</em>. Browse Phase 1 theory on the left, or ask me anything. I'll evaluate your answers like a real interviewer and score you out of 10. Ready? Type <strong>'Start'</strong> to begin, or ask a specific question.");
+    setQ(["Start Phase 1","Ask me Architecture","Quiz me on Apex","Start mock interview"]);
+  },2000);
+}
+
+function renderPhase(i){
+  curPhase=i; curTopic=0;
+  document.querySelectorAll('.ph').forEach((el,j)=>el.classList.toggle('on',j===i));
+  const p=DATA[i];
+  document.getElementById('phTitle').textContent=p.title;
+  document.getElementById('phSub').textContent=p.sub;
+  renderTabs(p);
+  renderCards(p.topics[0]);
+}
+
+function renderTabs(p){
+  const c=document.getElementById('tabRow');
+  c.innerHTML='';
+  p.topics.forEach((t,i)=>{
+    const b=document.createElement('button');
+    b.className='tab'+(i===0?' on':'');
+    b.textContent=t;
+    b.onclick=()=>{
+      document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+      curTopic=i;
+      renderCards(t);
+    };
+    c.appendChild(b);
+  });
+}
+
+function renderCards(topic){
+  const p=DATA[curPhase];
+  const cards=p.cards[topic]||[];
+  const el=document.getElementById('theory');
+  if(!cards.length){
+    el.innerHTML=`<div class="card"><div class="cl concept">INTERACTIVE</div><div class="card-title">${topic}</div><p>Ask the AI Interviewer: <strong>"Teach me about ${topic}"</strong> — the AI will give you a full explanation with examples, interview answers, and tricky questions in real-time.</p></div>`;
+    return;
+  }
+  el.innerHTML=cards.map(c=>`<div class="card"><div class="cl ${c.t}">${c.t.toUpperCase()}</div><div class="card-title">${c.h}</div><p>${c.b}</p></div>`).join('');
+}
+
+function gotoPhase(i){renderPhase(i)}
+
+function addMsg(role,html,score=null){
+  const c=document.getElementById('msgs');
+  const d=document.createElement('div');
+  d.className='msg '+role;
+  const who=role==='iv'?'🎯 Interviewer':role==='me'?'👤 You':'✅ System';
+  d.innerHTML=`<div class="msg-who">${who}</div><div class="msg-bub">${html}${score?`<div class="score-tag">⭐ ${score}</div>`:''}</div>`;
+  c.appendChild(d);
+  c.scrollTop=c.scrollHeight;
+}
+
+function showTyping(){
+  const c=document.getElementById('msgs');
+  const d=document.createElement('div');
+  d.id='typ';d.className='msg iv';
+  d.innerHTML=`<div class="msg-who">🎯 Interviewer</div><div class="typing-ind"><span></span><span></span><span></span></div>`;
+  c.appendChild(d);c.scrollTop=c.scrollHeight;
+}
+function removeTyping(){const t=document.getElementById('typ');if(t)t.remove();}
+
+function setQ(arr){
+  const c=document.getElementById('qrow');
+  c.innerHTML=arr.map(b=>`<button class="qbtn" onclick="sendQ('${b.replace(/'/g,"\\'")}')"> ${b}</button>`).join('');
+}
+
+function sendQ(t){document.getElementById('inp').value=t;send();}
+
+async function send(){
+  if(busy)return;
+  const inp=document.getElementById('inp');
+  const txt=inp.value.trim();
+  if(!txt)return;
+  inp.value='';
+  addMsg('me',txt);
+  hist.push({role:'user',content:txt});
+  busy=true;
+  document.getElementById('sbtn').disabled=true;
+  showTyping();
+
+  const p=DATA[curPhase];
+  const topic=p.topics[curTopic]||p.topics[0];
+
+  const sys=`You are a senior Salesforce Technical Architect and MNC interviewer with 15+ years of experience at Deloitte, Accenture, TCS, Cognizant, Capgemini, IBM, and Salesforce partners. You are training this specific candidate:
+
+CANDIDATE: ${ME}
+
+Current bootcamp focus: ${p.title} → Topic: ${topic}
+
+BEHAVIOR RULES:
+1. Act like a REAL, strict MNC interviewer — not a tutor. Direct, challenging, specific.
+2. When evaluating answers: always end with [SCORE: X/10] on a new line.
+3. After scoring: point out EXACT strengths and weaknesses. Reference the candidate's specific background (IBM, PD1, superbadges, MCA) when relevant.
+4. For coding questions: check bulkification, governor limits, best practices, test coverage.
+5. Ask follow-up questions that real interviewers ask. Don't let easy answers slide.
+6. Identify and call out common fresher mistakes before they make them.
+7. When teaching: Concept → Analogy → Interview Answer → One Tricky Question.
+8. Keep responses under 220 words but high-impact. No filler.
+9. Always end with a challenge or follow-up to maintain momentum.
+10. For HR questions: evaluate structure, confidence, professional tone, and authenticity.`;
+
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:hist})
+    });
+    const d=await r.json();
+    const reply=d.content?.map(b=>b.text||'').join('')||'Error.';
+    removeTyping();
+    const sm=reply.match(/\[SCORE:\s*([\d.]+\/10)\]/i);
+    const score=sm?sm[1]:null;
+    const clean=reply.replace(/\[SCORE:.*?\]/gi,'').trim();
+    addMsg('iv',clean.replace(/\n/g,'<br>'),score);
+    hist.push({role:'assistant',content:reply});
+    if(reply.toLowerCase().includes('write')||reply.toLowerCase().includes('code')){
+      setQ(["Here's my attempt","Give me a hint","Show ideal solution"]);
+    } else if(score){
+      setQ(["Follow-up question","Next topic","Another scenario"]);
+    } else {
+      setQ(["Ask me a question","Next topic","Give coding challenge"]);
+    }
+  }catch(e){removeTyping();addMsg('sys','Connection error. Retry.');}
+  busy=false;
+  document.getElementById('sbtn').disabled=false;
+}
+
+function doMock(){
+  renderPhase(4);hist=[];
+  addMsg('sys','🎬 MOCK INTERVIEW — Technical + HR Round. Full simulation mode.');
+  document.getElementById('inp').value="Start a full mock interview. Begin with asking me to introduce myself, then go through technical Salesforce questions, then HR questions. Be strict like a real Accenture or Deloitte interviewer.";
+  send();
+}
+function doRapid(){
+  hist=[];
+  addMsg('sys','⚡ RAPID FIRE — 10 questions, rate each 1-10, move fast.');
+  document.getElementById('inp').value="Start a rapid fire Salesforce round. Ask 10 questions one by one. Ask the first now. After each answer immediately rate 1-10 and ask next.";
+  send();
+}
+function doCoding(){
+  renderPhase(1);hist=[];
+  addMsg('sys','💻 CODING CHALLENGE — Write real Apex. I will evaluate like a code reviewer.');
+  document.getElementById('inp').value="Give me a coding challenge appropriate for a fresher Salesforce Developer. Start with one and wait for my solution.";
+  send();
+}
+
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
+init();
+</script>
+</body>
+</html>
